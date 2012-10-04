@@ -1,4 +1,6 @@
 var App ={
+	base_title: 'Home > News',
+	base_publication: 'The Atlanta Journal-Constitution',
 	renderer: Flatstache.to_html,
 
 	format_date: function (date_string) {
