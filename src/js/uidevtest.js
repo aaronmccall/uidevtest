@@ -19,6 +19,16 @@ var App ={
 			return this.renderer(date_tpl, date_obj);
 		}
 		
+	},
+	// Can be called with any object that has an href property
+	index_from_location: function (location_obj) {
+		var index_match = location_obj.href.match(/\bsto([\d]+)\b/),
+			index;
+		if (!index_match) {
+			return null;
+		}
+		index = parseInt(index_match.pop().replace(/^0/, ''));
+		return index;
 	}
 };
 
@@ -30,17 +40,22 @@ var App ={
 		init_handlers = function () {
 			$body.on('click', '.story_item a', function (e) {
 				e.preventDefault();
-				render_story(story_data, this);
+				render_story(story_data, App.index_from_location(this));
 			});
 		},
 
-		get_story = function (location_obj, data) {
-			var index_match = location_obj.href.match(/\bsto([\d]+)\b/),
-				index;
-			if (!index_match) {
-				return null;
-			}
-			index = parseInt(index_match.pop().replace(/^0/, ''));
+		render_breadcrumbs = function (data) {
+			var bc_data = data || [
+				{link: location.pathname.split('/').slice(0,-1).join('/')+'/', text: 'Home'},
+				{link: location.pathname, text: 'News'}
+			], rendered_crumbs = [];
+			$.each(bc_data, function (idx, crumb) {
+				rendered_crumbs.push(templates.breadcrumb(crumb));
+			});
+			return rendered_crumbs.join(" > ");
+		},
+
+		get_story = function (index, data) {
 			if (!index) return null;
 			return {index: index, data: data[index-1] || null};
 		},
@@ -52,17 +67,17 @@ var App ={
 		render_page = function (data) {
 			var rendering_story = is_story(window.location);
 			if (rendering_story) {
-				render_story(data, window.location);
+				render_story(data, App.index_from_location(window.location));
 			} else {
 				render_list(data);
 			}
 		},
 
-		render_story = function (data, location_obj) {
+		render_story = function (data, index) {
 			var story = get_story(index, data),
 				story_html;
 			if (story) {
-				story_html = templates.story_detail(story.data);
+				story_html = templates.story_detail($.extend({}, story.data, {breadcrumbs: render_breadcrumbs()}));
 				$body.html(story_html);
 			}
 		},
@@ -76,7 +91,8 @@ var App ={
 			$body.html(html);
 		};
 
-		$.getJSON('../js/uidevtest-data.js', function (data) {
+
+	$.getJSON('../js/uidevtest-data.js', function (data) {
 		if (data && data.objects) {
 			$.each(data.objects, function (idx, story) {
 				var id = (idx+1 < 10) ? '0' + (idx+1) : (idx+1),
