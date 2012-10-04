@@ -3,6 +3,21 @@ var App ={
 	base_publication: 'The Atlanta Journal-Constitution',
 	renderer: Flatstache.to_html,
 
+	history: (function(window, undefined){
+	    var history = window.history,
+	        doc = window.document,
+	        state_changer = function(type, data, title, url){
+	            this[type+'State'].apply(this, _.rest(arguments));
+	            if (title && doc.title !== title) doc.title = title;
+	        },
+	        noop = function(){};
+
+	    return {
+	        pushState: (history.pushState && _.isFunction(history.pushState)) ? _.bind(state_changer, history, 'push') : noop,
+	        replaceState: (history.replaceState && _.isFunction(history.replaceState)) ? _.bind(state_changer, history, 'replace') : noop
+	    };
+	})(window),
+
 	format_date: function (date_string) {
 		var date = new Date(date_string),
 			date_tpl = '{{ hr }}:{{ min }} {{ am_pm }} {{ day }}, {{ mo }}. {{ mo_day }}, {{ year }}';
@@ -43,6 +58,19 @@ var App ={
 			$body.on('click', '.story_item a', function (e) {
 				e.preventDefault();
 				render_story(story_data, App.index_from_location(this));
+				App.history.pushState({story: App.index_from_location(this)}, App.base_title + ' > '  + $(this).text(), this.href);
+			});
+				
+			$(window).on('popstate', function (e) {
+				if (e.originalEvent && e.originalEvent.state) {
+					var state = e.originalEvent.state;
+					if (state.list) {
+						render_list(story_data);
+						App.history.replaceState(state, App.base_title, window.location.pathname);
+					} else if (state.story) {
+						render_story(story_data, state.story);
+					}
+				}
 			});
 		},
 
@@ -109,6 +137,9 @@ var App ={
 			});
 		}
 		render_page(story_data);
+		if (!is_story(window.location)) {
+			App.history.replaceState({list: true}, App.base_title, window.location.href);
+		}
 		init_handlers();
 	}).error(function (jqXhr, err_type, err) {
 		console && console.log(err_type + ': ' + err);
