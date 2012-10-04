@@ -9,12 +9,11 @@ var App ={
 	        state_changer = function(type, data, title, url){
 	            this[type+'State'].apply(this, _.rest(arguments));
 	            if (title && doc.title !== title) doc.title = title;
-	        },
-	        noop = function(){};
+	        };
 
 	    return {
-	        pushState: (history.pushState && _.isFunction(history.pushState)) ? _.bind(state_changer, history, 'push') : noop,
-	        replaceState: (history.replaceState && _.isFunction(history.replaceState)) ? _.bind(state_changer, history, 'replace') : noop
+	        pushState: _.bind(state_changer, history, 'push'),
+	        replaceState: _.bind(state_changer, history, 'replace')
 	    };
 	})(window),
 
