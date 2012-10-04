@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Home > News</title>
+		<link href="../css/uidevtest.css" type="text/css" rel="stylesheet" />
+	</head>
+	<body>
+
+	<div id="main">
+		<h3 class="loading">Content loading...</h3>
+	</div>
+
+	<script type="text/x-template" id="story_list">
+	<ul class="story_list">{{{ story_list }}}</ul>
+	</script>
+
+	<script type="text/x-template" id="story_list_item">
+	<li class="story_item">
+		<img src="{{ lead_photo_image_thumb }}">
+		<a href="?story=sto{{ id }}">{{ title }}</a>
+		<p class="categories">{{ categories }}</p>
+		<p class="story_dates">Posted: {{ post_date }}</p>
+		<p class="story_dates">Updated: {{ update_date }}</p>
+	</li>
+	</script>
+
+	<script type="text/x-template" id="story_detail">
+	<article>
+		<nav class="breadcrumbs">{{{ breadcrumbs }}}</nav>
+		<header class="story_header">
+			<p class="story_dates">Updated: {{ update_date }} | Posted: {{ post_date }}</p>
+			<h1>{{ title }}</h1>
+		</header>
+		<div class="story_image">
+			<img src="{{ lead_photo_image_url }}" />
+		</div>
+		<div class="story">
+			<p class="social">
+				<a class="social_link comment" href="#">comment</a>
+				<a class="social_link share" href="#">share</a>
+				<a class="social_link favorite" href="#">favorite</a>
+				<a class="social_link vote" href="#">vote</a>
+			</p>
+			<div class="story_meta">
+				<p class="byline">By <span class="author">{{ byline }}</span></p>
+				<p class="publication">{{ publication }}</span></p>
+			</div>
+			{{{ story }}}
+		</div>
+	</article>
+	</script>
+
+	<script type="text/x-template" id="breadcrumb">
+	<a href="{{ link }}">{{ text }}</a>
+	</script>
+
+	<script type="text/javascript" src="../js/library.js"></script>
+	<script type="text/javascript" src="../js/uidevtest.js"></script>
+	</body>
+</html>
