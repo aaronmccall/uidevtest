@@ -1,0 +1,145 @@
+body, h1, h2, h3, p {
+    font: 1em/1.5em Arial, sans-serif; /* set base font-size/line-height to 16/24px zoomable */
+}
+
+a, a:visited, a:active, a:link, a:hover, .breadcrumbs, .author {
+    color: #036dbe;
+}
+
+.social, .breadcrumbs {
+    font: bold 0.6875em Arial; /* 16px * 0.6875 = 11px */
+}
+
+.breadcrumbs {
+    border: 2px solid #cdcdcd;
+    border-width: 2px 0px;
+}
+
+.story_list {
+    list-style-type: none;
+    padding-left: 1em;
+}
+
+    .story_item {
+        margin-bottom: .75em;
+        overflow: auto;
+    }
+        .story_item a {
+            display: block;
+            margin-top: .25em;
+            font-weight: bold;
+        }
+        .story_item img {
+            float: left;
+            border: solid white;
+            box-shadow: 3px 4px 5px #999;
+            margin: 0 .5em .25em 0;
+        }
+
+.story, .categories, .story_dates {
+    font-size: 0.875em; /* 16px * 0.875 = 14px */
+    color: #444;
+}
+
+.categories {
+    margin-top: 0;
+}
+
+.story_dates {
+    margin: 0;
+}
+
+.social, .byline {
+    -moz-column-span: all;
+    -webkit-column-span: all;
+    column-span: all;
+}
+    .social_link {
+        text-transform: uppercase;
+        margin-left: 20px;
+        display: inline-block;
+        position: relative;
+        line-height: 20px;
+        vertical-align: bottom;
+    }
+    .social_link:before {
+        content: "";
+        position: absolute;
+        left: -20px;
+        bottom: 0px;
+        width: 20px;
+        height: 20px;
+        overflow: hidden;
+        background: url('../images/uidevtest-sprites.png') no-repeat;
+        filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale"); /* Firefox 3.5+ */
+        filter: gray; /* IE6-9 */
+        -webkit-filter: grayscale(100%); /* Chrome 19+ &amp; Safari 6+ */
+    }
+    .social_link:hover:before {
+        filter: none;
+        -webkit-filter: grayscale(0%);
+    }
+    .share:before {
+        background-position: -20px 0px;
+    }
+    .favorite:before {
+        background-position: -40px 0px;
+    }
+    .vote:before {
+        background-position: -60px 0px;
+    }
+
+.story_image {
+    width: 260px;
+    margin-right: 15px;
+    float: left;
+}
+
+.story {
+    width: 535px;
+    -moz-column-count: 2;
+    -moz-column-gap: 15px;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 15px;
+    column-count: 2;
+    column-gap: 20px;
+    line-height: 1.125em;
+}
+    .story p {
+        margin-top: 0;
+    }
+
+.story_header {
+    display: table;
+}
+
+.story_header h1 {
+    display: table-header-group;
+    font-size: 1.5em;
+    margin: .25em 0;
+}
+
+.story_header .story_dates {
+    display: table-footer-group;
+    font-size: 0.6875em;
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .story_image, .story {
+        width: 100%;
+        -moz-column-count: 1;
+        -webkit-column-count: 1;
+        column-count: 1;
+
+    }
+
+    .social_link:before {
+        filter: none;
+        -webkit-filter: grayscale(0%);
+    }
+
+    .story_header h1, .story_header .story_dates {
+        display: block;
+    }
+}
