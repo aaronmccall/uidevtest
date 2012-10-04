@@ -55,23 +55,25 @@ var App ={
 		$body = $(document.body),
 
 		init_handlers = function () {
-			$body.on('click', '.story_item a', function (e) {
-				e.preventDefault();
-				render_story(story_data, App.index_from_location(this));
-				App.history.pushState({story: App.index_from_location(this)}, App.base_title + ' > '  + $(this).text(), this.href);
-			});
-				
-			$(window).on('popstate', function (e) {
-				if (e.originalEvent && e.originalEvent.state) {
-					var state = e.originalEvent.state;
-					if (state.list) {
-						render_list(story_data);
-						App.history.replaceState(state, App.base_title, window.location.pathname);
-					} else if (state.story) {
-						render_story(story_data, state.story);
+			if (window.history && window.history.pushState) {
+				$body.on('click', '.story_item a', function (e) {
+					e.preventDefault();
+					render_story(story_data, App.index_from_location(this));
+					App.history.pushState({story: App.index_from_location(this)}, App.base_title + ' > '  + $(this).text(), this.href);
+				});
+					
+				$(window).on('popstate', function (e) {
+					if (e.originalEvent && e.originalEvent.state) {
+						var state = e.originalEvent.state;
+						if (state.list) {
+							render_list(story_data);
+							App.history.replaceState(state, App.base_title, window.location.pathname);
+						} else if (state.story) {
+							render_story(story_data, state.story);
+						}
 					}
-				}
-			});
+				});
+			}
 		},
 
 		render_breadcrumbs = function (data) {
